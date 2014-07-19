@@ -3,6 +3,7 @@ package model;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class GridField {
@@ -82,6 +83,8 @@ public class GridField {
 	}
 	
 	public void generateFile() {
+		StringBuilder builder = new StringBuilder();
+		int row = 0;
 		for (int group = 0; group < 6; group++) {
 			for (int i = 0; i < gridSize.width; i++) {
 				int number = 0;
@@ -89,12 +92,37 @@ public class GridField {
 					int currentIndex = group * (gridSize.width * 8) + j + i * 8;
 					Block block = blocks.get(currentIndex);
 					if (block.isSelected()) {
-						number =+ (j + 1) * 16;
+						number += (int) (Math.pow(2, j));
 					}
 				}
-				System.out.println(number);
+				
+				row++;
+				if (row == 16) {
+					if (number >= 16) {
+						builder.append("0x" + Integer.toHexString(number).toUpperCase() + ",\n");
+					} else {
+						builder.append("0x0" + Integer.toHexString(number).toUpperCase() + ",\n");
+					}
+					row = 0;
+				} else {
+					if (number >= 16) {
+						builder.append("0x" + Integer.toHexString(number).toUpperCase() + ",");
+					} else {
+						builder.append("0x0" + Integer.toHexString(number).toUpperCase() + ",");
+					}
+				}
 			}
 		}
+		save("LEDHex.txt",builder.toString());
 	}
-
+	
+	private void save(String filename, String text) {
+		try {
+			PrintWriter writer = new PrintWriter(filename);
+			writer.print(text);
+			writer.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 }

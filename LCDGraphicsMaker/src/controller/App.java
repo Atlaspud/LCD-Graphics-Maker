@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -32,6 +35,7 @@ public class App {
 		gridField = new GridField(new Dimension(800,600));
 		gridDisplay = new GridDisplay(gridField,new Dimension(800,600));
 		mainFrame = new MainFrame(gridDisplay);
+		mainFrame.setJMenuBar(setupMenuBar());
 		
 		gridDisplay.setFocusable(true);
 		gridField.reset();
@@ -58,8 +62,41 @@ public class App {
 		mainFrame.pack();
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);
-		gridField.generateFile();
 		animationTimer.start();
 	}
+	
+	private static JMenuBar setupMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+		
+		JMenuItem exportMenuItem = new JMenuItem("Export");
+	
+		menuBar.add(fileMenu);
+		
+		fileMenu.add(exportMenuItem);
+		
+		ActionListener menuHandler = new ActionListener(){
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				switch(e.getActionCommand()) {
+				case "Export":
+					exportImage();
+					break;
+				}
+			}
+		};
+		exportMenuItem.addActionListener(menuHandler);
+		return menuBar;
+	}
+	
+	/* save()
+	 * 
+	 * helper method to save a string to a given filename, if filename exists text is added,
+	 * if it does not exist, it is created and text is added.
+	 */
+	
+	private static void exportImage() {
+		gridField.generateFile();
+	}
 }
