@@ -1,0 +1,28 @@
+package view;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
+
+import au.edu.jcu.model.BlockField;
+
+public class GameDisplay extends JPanel {
+	
+	private static final long serialVersionUID = 1L;
+	GridField gridField;
+
+	public GameDisplay(GridField gridField, Dimension dimension) {
+		setPreferredSize(dimension);
+		this.gridField = gridField;
+		setBackground(Color.BLACK);
+	}
+	
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		gridField.draw(g);
+	}
+
+}
