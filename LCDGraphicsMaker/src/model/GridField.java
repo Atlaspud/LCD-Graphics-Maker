@@ -4,40 +4,45 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class GridField {
-	private ArrayList<Block> barriers;
+	private ArrayList<Block> blocksBackground;
+	private ArrayList<Block> blocks;
 	private Dimension fieldSize;
+	private int blockSize;
+	private Dimension gridSize;
 	
 	public GridField(Dimension size) {
 		fieldSize = size;
-		barriers = new ArrayList<Block>();
+		blocksBackground = new ArrayList<Block>();
+		blocks = new ArrayList<Block>();
+		gridSize = new Dimension(84,48);
+		blockSize = 8;
 	}
 	
-	/*	reset()
-	 * 
-	 * 	clear all enemy, bullet and barrier arrays
-	 * 	Initialize ship to starting state
-	 * 	Reconstruct new barriers
-	 * 	Start the game
-	 */
-	
 	public void reset() {
-		barriers.clear();
+		blocksBackground.clear();
+		blocks.clear();
 		
-		// initialise barrier code//
-		double divideField = (fieldSize.width-20*9*3)/4;
+		double divideField = (fieldSize.width-blockSize*gridSize.width)/2;
+		for (int i = 0; i < gridSize.height; i++) {
+			for (int j = 0; j < gridSize.width; j++) {
+				Block block = new Block(true);
+				block.size.setSize(blockSize, blockSize);
+				block.position.setLocation(divideField + blockSize * j, 100 + blockSize * i);
+				block.colour = Color.BLACK;
+				blocksBackground.add(block);
+			}
+		}
 		
-		for (int group = 0; group < 3; group++) {
-			for (int i = 0; i < 7; i++) {
-				for (int j = 0; j < 9; j++) {
-					Block barrier = new Block();
-					barrier.size.setSize(20, 20);
-					barrier.position.setLocation(divideField + 
-							(20*9 + divideField) * group + 20 * j, fieldSize.height - 100 - 20 * i);
-					barrier.colour = Color.WHITE;
-					barriers.add(barrier);
+		for (int group = 0; group < 6; group++) {
+			for (int i = 0; i < gridSize.width; i++) {
+				for (int j = 0; j < 8; j++) {
+					Block block = new Block(false);
+					block.size.setSize(blockSize, blockSize);
+					block.position.setLocation(divideField + blockSize * i, 100 + (blockSize*8) * group + blockSize * j);
+					block.colour = Color.WHITE;
+					blocks.add(block);
 				}
 			}
 		}
@@ -45,8 +50,12 @@ public class GridField {
 	
 	public void draw(Graphics g) {
 		
-		for (Block barrier : barriers) {
-			barrier.draw(g);
+		for (Block block : blocks) {
+			block.draw(g);
+		}
+		
+		for (Block block : blocksBackground) {
+			block.draw(g);
 		}
 	}
 	
@@ -63,8 +72,29 @@ public class GridField {
 	 * -The ship uses move()
 	 */
 	
-	public void update() {
+	public void update(int x, int y) {
 		// Update Grid State
+		for (Block block: blocks) {
+			if (block.hit(x, y)) {
+				break;
+			}
+		}
+	}
+	
+	public void generateFile() {
+		for (int group = 0; group < 6; group++) {
+			for (int i = 0; i < gridSize.width; i++) {
+				int number = 0;
+				for (int j = 0; j < 8; j++) {
+					int currentIndex = group * (gridSize.width * 8) + j + i * 8;
+					Block block = blocks.get(currentIndex);
+					if (block.isSelected()) {
+						number =+ (j + 1) * 16;
+					}
+				}
+				System.out.println(number);
+			}
+		}
 	}
 
 }

@@ -1,0 +1,62 @@
+package controller;
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.Timer;
+
+import au.edu.jcu.model.BlockField;
+import au.edu.jcu.model.GameState;
+import au.edu.jcu.model.MovableBlock;
+import au.edu.jcu.view.GameDisplay;
+import model.GridField;
+import view.GridDisplay;
+import view.MainFrame;
+
+public class App {
+	
+	static GridField gridField;
+	static GridDisplay gridDisplay;
+	static MainFrame mainFrame;
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+	
+	private static void setup() {
+		gridField = new GridField(new Dimension(800,600));
+		gridDisplay = new GridDisplay(gridField,new Dimension(800,600));
+		mainFrame = new MainFrame(gridDisplay);
+		
+		gridDisplay.setFocusable(true);
+			
+		gridDisplay.addKeyListener(new KeyAdapter() {
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				
+			}
+		});
+		
+		animationTimer = new Timer(10, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				// updates the position of all block objects
+				gridField.update();
+				
+				gridDisplay.repaint();
+				
+			}
+		});
+		mainFrame.pack();
+		mainFrame.setLocationRelativeTo(null);
+		mainFrame.setVisible(true);
+	}
+
+}

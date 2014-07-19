@@ -1,0 +1,69 @@
+package model;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.util.ArrayList;
+
+public class GridField {
+	private ArrayList<Block> barriers;
+	private Dimension fieldSize;
+	
+	public GridField(Dimension size) {
+		fieldSize = size;
+		barriers = new ArrayList<Block>();
+	}
+	
+	/*	reset()
+	 * 
+	 * 	clear all enemy, bullet and barrier arrays
+	 * 	Initialize ship to starting state
+	 * 	Reconstruct new barriers
+	 * 	Start the game
+	 */
+	
+	public void reset() {
+		barriers.clear();
+		
+		// initialise barrier code//
+		double divideField = (fieldSize.width-20*9*3)/4;
+		
+		for (int group = 0; group < 3; group++) {
+			for (int i = 0; i < 7; i++) {
+				for (int j = 0; j < 9; j++) {
+					Block barrier = new Block();
+					barrier.size.setSize(20, 20);
+					barrier.position.setLocation(divideField + 
+							(20*9 + divideField) * group + 20 * j, fieldSize.height - 100 - 20 * i);
+					barrier.colour = Color.WHITE;
+					barriers.add(barrier);
+				}
+			}
+		}
+	}
+	
+	public void draw(Graphics g) {
+		
+		for (Block barrier : barriers) {
+			barrier.draw(g);
+		}
+	}
+	
+	/* update()
+	 * 
+	 * -Each bullet uses move()
+	 * -Checks if bullet has impacted a barrier, enemy, ship, or another bullet
+	 * -If the ship has been impacted, gameover is set to true
+	 * -For the rest both impact objects are removed from the arrays
+	 * -If the enemy impacts the ship, gameover is true
+	 * -If the enemy impacts a barrier, that barrier is removed from the array
+	 * -Each enemy uses ()
+	 * -Each enemy uses enemyRandomFire()
+	 * -The ship uses move()
+	 */
+	
+	public void update() {
+		// Update Grid State
+	}
+
+}
