@@ -1,4 +1,4 @@
 LCD-Graphics-Maker
 ==================
 
-Led Graphics for Adafruit LCD Screens
+LCD Graphics for Adafruit LCD Screens
