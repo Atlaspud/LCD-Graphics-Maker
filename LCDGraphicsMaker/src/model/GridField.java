@@ -12,6 +12,7 @@ public class GridField {
 	private Dimension fieldSize;
 	private int blockSize;
 	private Dimension gridSize;
+	private boolean hasChanged = false;
 	
 	public GridField(Dimension size) {
 		fieldSize = size;
@@ -22,11 +23,13 @@ public class GridField {
 	}
 	
 	public void startNew() {
+		hasChanged = true;
 		createGrid();
 		createNewBlocks();
 	}
 	
 	public void loadBlocks(String data) {
+		hasChanged = false;
 		int binaryArray [] = {128, 64, 32, 16, 8, 4, 2, 1};
 		createGrid();
 		createNewBlocks();
@@ -89,6 +92,7 @@ public class GridField {
 	}
 	
 	public void update(int x, int y) {
+		hasChanged = true;
 		// Update Grid State
 		for (Block block: blocks) {
 			if (block.hit(x, y)) {
@@ -98,6 +102,7 @@ public class GridField {
 	}
 	
 	public void updateDrag(int x, int y) {
+		hasChanged = true;
 		// Update Grid State
 		for (Block block: blocks) {
 			if (block.hitDrag(x, y)) {
@@ -106,7 +111,7 @@ public class GridField {
 		}
 	}
 	
-	public void generateFile() {
+	private String generateFile() {
 		StringBuilder builder = new StringBuilder();
 		int row = 0;
 		for (int group = 0; group < 6; group++) {
@@ -137,14 +142,12 @@ public class GridField {
 				}
 			}
 		}
-		save("LEDHex.txt",builder.toString());
+		return builder.toString();
 	}
 	
-	public void loadFile() {
-		
-	}
-	
-	private void save(String filename, String text) {
+	public void save(String filename) {
+		hasChanged = false;
+		String text = generateFile();
 		try {
 			PrintWriter writer = new PrintWriter(filename);
 			writer.print(text);
@@ -152,5 +155,9 @@ public class GridField {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+	}
+	
+	public boolean gridHasChanged() {
+		return hasChanged;
 	}
 }

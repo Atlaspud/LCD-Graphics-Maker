@@ -28,6 +28,7 @@ public class App {
 	static MainFrame mainFrame;
 	static Timer animationTimer;
 	static MyListener myListener;
+	static JMenuItem saveMenuItem;
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -56,6 +57,11 @@ public class App {
 
 				// updates the position of all block objects
 				gridDisplay.repaint();
+				if (gridField.gridHasChanged()) {
+					saveMenuItem.setEnabled(true);
+				} else {
+					saveMenuItem.setEnabled(false);
+				}
 				
 			}
 		});
@@ -71,7 +77,7 @@ public class App {
 		JMenu helpMenu = new JMenu("Help");
 		
 		JMenuItem newMenuItem = new JMenuItem("New");
-		JMenuItem exportMenuItem = new JMenuItem("Export");
+		saveMenuItem = new JMenuItem("Save");
 		JMenuItem loadMenuItem = new JMenuItem("Load");
 		JMenuItem aboutMenuItem = new JMenuItem("About");
 		JMenuItem exitMenuItem = new JMenuItem("Exit");
@@ -80,10 +86,12 @@ public class App {
 		menuBar.add(helpMenu);
 		
 		fileMenu.add(newMenuItem);
-		fileMenu.add(exportMenuItem);
+		fileMenu.add(saveMenuItem);
 		fileMenu.add(loadMenuItem);
 		fileMenu.add(exitMenuItem);
 		helpMenu.add(aboutMenuItem);
+		
+		saveMenuItem.setEnabled(false);
 		
 		ActionListener menuHandler = new ActionListener(){
 
@@ -93,8 +101,8 @@ public class App {
 				case "New":
 					startNew();
 					break;
-				case "Export":
-					exportImage();
+				case "Save":
+					saveImage();
 					break;
 				case "Load":
 					String data = loadFile();
@@ -104,7 +112,7 @@ public class App {
 					JOptionPane.showMessageDialog(mainFrame, 
 							"LCD Graphics Maker for use with AdaFruit Nokia 5110\n"
 							+ "LCD Screens.\n\n\nCreated and distributed by,\n"
-							+ "Brendan Calvert", "About", JOptionPane.PLAIN_MESSAGE);
+							+ "Brendan Calvert July 2014", "About", JOptionPane.PLAIN_MESSAGE);
 					break;
 				case "Exit":
 					System.exit(0);
@@ -113,7 +121,7 @@ public class App {
 			}
 		};
 		newMenuItem.addActionListener(menuHandler);
-		exportMenuItem.addActionListener(menuHandler);
+		saveMenuItem.addActionListener(menuHandler);
 		loadMenuItem.addActionListener(menuHandler);
 		aboutMenuItem.addActionListener(menuHandler);
 		exitMenuItem.addActionListener(menuHandler);
@@ -148,9 +156,6 @@ public class App {
 					data.append(line);
 				}
 			}
-//			String test [] = data.toString().split(",");
-			
-//			System.out.println(Integer.parseInt(test[26].split("x")[1],16));
 			scanner.close();
 		} catch (Exception e) {
 			
@@ -158,8 +163,18 @@ public class App {
 		return data.toString();
 	}
 	
-	private static void exportImage() {
-		gridField.generateFile();
+	private static void saveImage() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setDialogTitle("select folder");
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		chooser.setAcceptAllFileFilterUsed(false);
+		
+		int result = chooser.showSaveDialog(null);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			String path = chooser.getSelectedFile().getAbsolutePath();
+			System.out.println(path);
+			gridField.save(path);
+		}
 	}
 	
 	private static class MyListener extends MouseInputAdapter {
