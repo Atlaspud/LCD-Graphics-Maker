@@ -1,17 +1,2 @@
 INDEX VERSION 1.126+/Users/Atlaspud/Documents/JCU/Electronics Club/Projects/LCD-Graphics-Maker/.metadata/.plugins/org.eclipse.jdt.core
-3892717781.index
 2593189408.index
-2195420358.index
-2963205766.index
-2447020145.index
-4016827596.index
-23432672.index
-3873284327.index
-1896839535.index
-1779826490.index
-101206521.index
-1986182518.index
-1683166340.index
-3927879410.index
-2557271130.index
-3575796058.index
