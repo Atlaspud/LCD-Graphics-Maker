@@ -1,0 +1,117 @@
+package controller;
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+import javax.swing.event.MouseInputAdapter;
+
+import model.GridField;
+import view.GridDisplay;
+import view.MainFrame;
+
+public class App {
+	
+	static GridField gridField;
+	static GridDisplay gridDisplay;
+	static MainFrame mainFrame;
+	static Timer animationTimer;
+	static MyListener myListener;
+
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				setup();
+			}
+		});
+	}
+	
+	private static void setup() {
+		gridField = new GridField(new Dimension(672,384));
+		gridDisplay = new GridDisplay(gridField,new Dimension(672,384));
+		mainFrame = new MainFrame(gridDisplay);
+		mainFrame.setJMenuBar(setupMenuBar());
+		
+		gridDisplay.setFocusable(true);
+		gridField.reset();
+		
+		myListener = new MyListener();
+	    gridDisplay.addMouseListener(myListener);
+	    gridDisplay.addMouseMotionListener(myListener);
+		
+		animationTimer = new Timer(10, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				// updates the position of all block objects
+				gridDisplay.repaint();
+				
+			}
+		});
+		mainFrame.pack();
+		mainFrame.setLocationRelativeTo(null);
+		mainFrame.setVisible(true);
+		animationTimer.start();
+	}
+	
+	private static JMenuBar setupMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+		
+		JMenuItem exportMenuItem = new JMenuItem("Export");
+		JMenuItem exitMenuItem = new JMenuItem("Exit");
+	
+		menuBar.add(fileMenu);
+		
+		fileMenu.add(exportMenuItem);
+		fileMenu.add(exitMenuItem);
+		
+		ActionListener menuHandler = new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				switch(e.getActionCommand()) {
+				case "Export":
+					exportImage();
+					break;
+				case "Load":
+					break;
+				case "Exit":
+					System.exit(0);
+					break;
+				}
+			}
+		};
+		exportMenuItem.addActionListener(menuHandler);
+		exitMenuItem.addActionListener(menuHandler);
+		return menuBar;
+	}
+	
+	/* save()
+	 * 
+	 * helper method to save a string to a given filename, if filename exists text is added,
+	 * if it does not exist, it is created and text is added.
+	 */
+	
+	private static void exportImage() {
+		gridField.generateFile();
+	}
+	
+	private static class MyListener extends MouseInputAdapter {
+	    public void mousePressed(MouseEvent e) {
+	        gridField.update(e.getX(), e.getY());
+	    }
+
+	    public void mouseDragged(MouseEvent e) {
+	    	gridField.updateDrag(e.getX(), e.getY());
+	    }
+
+	}
+}

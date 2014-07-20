@@ -30,7 +30,7 @@ public class GridField {
 			for (int j = 0; j < gridSize.width; j++) {
 				Block block = new Block(true);
 				block.size.setSize(blockSize, blockSize);
-				block.position.setLocation(divideField + blockSize * j, 100 + blockSize * i);
+				block.position.setLocation(divideField + blockSize * j, blockSize * i);
 				block.colour = Color.BLACK;
 				blocksBackground.add(block);
 			}
@@ -41,7 +41,7 @@ public class GridField {
 				for (int j = 0; j < 8; j++) {
 					Block block = new Block(false);
 					block.size.setSize(blockSize, blockSize);
-					block.position.setLocation(divideField + blockSize * i, 100 + (blockSize*8) * group + blockSize * j);
+					block.position.setLocation(divideField + blockSize * i, (blockSize*8) * group + blockSize * j);
 					block.colour = Color.WHITE;
 					blocks.add(block);
 				}
@@ -60,23 +60,19 @@ public class GridField {
 		}
 	}
 	
-	/* update()
-	 * 
-	 * -Each bullet uses move()
-	 * -Checks if bullet has impacted a barrier, enemy, ship, or another bullet
-	 * -If the ship has been impacted, gameover is set to true
-	 * -For the rest both impact objects are removed from the arrays
-	 * -If the enemy impacts the ship, gameover is true
-	 * -If the enemy impacts a barrier, that barrier is removed from the array
-	 * -Each enemy uses ()
-	 * -Each enemy uses enemyRandomFire()
-	 * -The ship uses move()
-	 */
-	
 	public void update(int x, int y) {
 		// Update Grid State
 		for (Block block: blocks) {
 			if (block.hit(x, y)) {
+				break;
+			}
+		}
+	}
+	
+	public void updateDrag(int x, int y) {
+		// Update Grid State
+		for (Block block: blocks) {
+			if (block.hitDrag(x, y)) {
 				break;
 			}
 		}
@@ -114,6 +110,10 @@ public class GridField {
 			}
 		}
 		save("LEDHex.txt",builder.toString());
+	}
+	
+	public void loadFile() {
+		
 	}
 	
 	private void save(String filename, String text) {

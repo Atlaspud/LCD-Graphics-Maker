@@ -30,7 +30,18 @@ public class Block {
 				colour = Color.WHITE;
 			}
 		}
-		System.out.println(thisBlock.intersects(otherBlock));
+		return thisBlock.intersects(otherBlock);
+	}
+	
+	public boolean hitDrag(int x, int y) {
+		Rectangle thisBlock = new Rectangle(position.x, position.y, size.width, size.height);
+		Rectangle otherBlock = new Rectangle(x, y, 1, 1);
+		
+		if (thisBlock.intersects(otherBlock)) {
+			if (colour == Color.WHITE) {
+				colour = Color.BLUE;
+			}
+		}
 		return thisBlock.intersects(otherBlock);
 	}
 	

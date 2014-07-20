@@ -19,7 +19,7 @@ import javax.swing.undo.UndoManager;
 
 public class TextEditor {
 	public static void main(String[] args) {
-JFrame frame = new JFrame("Text Editor");
+		JFrame frame = new JFrame("Text Editor");
 		
 		final Document document = new PlainDocument();
 		final UndoManager undoManager = new UndoManager();
