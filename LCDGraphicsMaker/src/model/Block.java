@@ -25,7 +25,7 @@ public class Block {
 		
 		if (thisBlock.intersects(otherBlock)) {
 			if (colour == Color.WHITE) {
-				colour = Color.BLUE;
+				select();
 			} else {
 				colour = Color.WHITE;
 			}
@@ -39,7 +39,7 @@ public class Block {
 		
 		if (thisBlock.intersects(otherBlock)) {
 			if (colour == Color.WHITE) {
-				colour = Color.BLUE;
+				select();
 			}
 		}
 		return thisBlock.intersects(otherBlock);
@@ -54,6 +54,10 @@ public class Block {
 			g.fillRect(this.position.x, this.position.y, 
 					this.size.width, this.size.height);
 		}
+	}
+	
+	public void select() {
+		colour = Color.BLUE;
 	}
 	
 	public boolean isSelected() {

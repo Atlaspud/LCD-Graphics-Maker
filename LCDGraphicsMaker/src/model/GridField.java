@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class GridField {
-	private ArrayList<Block> blocksBackground;
+	private ArrayList<Block> gridBlocks;
 	private ArrayList<Block> blocks;
 	private Dimension fieldSize;
 	private int blockSize;
@@ -15,16 +15,40 @@ public class GridField {
 	
 	public GridField(Dimension size) {
 		fieldSize = size;
-		blocksBackground = new ArrayList<Block>();
+		gridBlocks = new ArrayList<Block>();
 		blocks = new ArrayList<Block>();
 		gridSize = new Dimension(84,48);
 		blockSize = 8;
 	}
 	
-	public void reset() {
-		blocksBackground.clear();
-		blocks.clear();
-		
+	public void startNew() {
+		createGrid();
+		createNewBlocks();
+	}
+	
+	public void loadBlocks(String data) {
+		int binaryArray [] = {128, 64, 32, 16, 8, 4, 2, 1};
+		createGrid();
+		createNewBlocks();
+		int index = 0;
+		String dataArray [] = data.split(",");
+		for (String byteString : dataArray) {
+			index += 8;
+			int number = Integer.parseInt(byteString.split("x")[1],16);
+			int binaryIndex = 0;
+			for (int i = index-1; i >= index - 8; i--) {
+				if (number >= binaryArray[binaryIndex]) {
+					number -= binaryArray[binaryIndex];
+					Block block = blocks.get(i);
+					block.select();
+				}
+				binaryIndex++;
+			}
+		}
+	}
+	
+	private void createGrid() {
+		gridBlocks.clear();
 		double divideField = (fieldSize.width-blockSize*gridSize.width)/2;
 		for (int i = 0; i < gridSize.height; i++) {
 			for (int j = 0; j < gridSize.width; j++) {
@@ -32,10 +56,14 @@ public class GridField {
 				block.size.setSize(blockSize, blockSize);
 				block.position.setLocation(divideField + blockSize * j, blockSize * i);
 				block.colour = Color.BLACK;
-				blocksBackground.add(block);
+				gridBlocks.add(block);
 			}
 		}
-		
+	}
+	
+	private void createNewBlocks() {
+		blocks.clear();
+		double divideField = (fieldSize.width-blockSize*gridSize.width)/2;
 		for (int group = 0; group < 6; group++) {
 			for (int i = 0; i < gridSize.width; i++) {
 				for (int j = 0; j < 8; j++) {
@@ -55,7 +83,7 @@ public class GridField {
 			block.draw(g);
 		}
 		
-		for (Block block : blocksBackground) {
+		for (Block block : gridBlocks) {
 			block.draw(g);
 		}
 	}

@@ -97,7 +97,8 @@ public class App {
 					exportImage();
 					break;
 				case "Load":
-					loadFile();
+					String data = loadFile();
+					gridField.loadBlocks(data);
 					break;
 				case "About":
 					JOptionPane.showMessageDialog(mainFrame, 
@@ -125,10 +126,11 @@ public class App {
 	 * if it does not exist, it is created and text is added.
 	 */
 	private static void startNew() {
-		gridField.reset();
+		gridField.startNew();
 	}
 	
 	private static String loadFile() {
+		StringBuilder data = new StringBuilder();
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Text file","txt");
 		chooser.setFileFilter(filter);
@@ -143,17 +145,17 @@ public class App {
 				String line = scanner.nextLine();
 				if (!line.isEmpty()) {
 					line = line.replaceAll("\n", "");
-					String[] elements = line.split(",");
-					for (String element : elements) {
-						
-					}
+					data.append(line);
 				}
 			}
+//			String test [] = data.toString().split(",");
+			
+//			System.out.println(Integer.parseInt(test[26].split("x")[1],16));
 			scanner.close();
 		} catch (Exception e) {
 			
 		}
-		return path;
+		return data.toString();
 	}
 	
 	private static void exportImage() {
