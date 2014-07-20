@@ -1,4 +1,0 @@
-Name: Brendan Level: 1 Score: 30
-Name: Brendan Level: 4 Score: 850
-Name: pud Level: 1 Score: 80
-Name: brendan Level: 1 Score: 20

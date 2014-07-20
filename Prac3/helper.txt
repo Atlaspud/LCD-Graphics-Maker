@@ -1,4 +1,0 @@
-A reference variable points to information regarding an object in the memory table.
-The main method is what is executed in the class.
-The 8 primitive types are: byte, char, boolean, short, int, long, float, double.
-Exit
